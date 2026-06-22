@@ -19,4 +19,4 @@ manylinux-x86_64-image = "manylinux2014"
 manylinux-aarch64-image = "manylinux2014"
 
 # Windows: AMD64
-windows = ["AMD64"]
+windows-archs = ["auto64"]
