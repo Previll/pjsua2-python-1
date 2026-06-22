@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 PJPROJECT_VERSION="2.17"
 MAX_CALLS=512
 RECORDERS=1024
@@ -41,4 +42,16 @@ python3 setup.py build_ext --inplace
 
 cd "${WORKDIR}"
 mkdir -p src/pjsua2_python
-cp pjproject/pjsip-apps/src/swig/python/*.so src/pjsua2_python/
+shopt -s nullglob
+so_files=(pjproject/pjsip-apps/src/swig/python/*.so)
+if (( ${#so_files[@]} == 0 )); then
+  echo "ERROR: No .so bindings were produced in pjproject/pjsip-apps/src/swig/python"
+  exit 1
+fi
+cp "${so_files[@]}" src/pjsua2_python/
+cp pjproject/pjsip-apps/src/swig/python/*.py src/pjsua2_python/ 2>/dev/null || true
+if [ ! -f src/pjsua2_python/__init__.py ]; then
+  cat <<'EOF' > src/pjsua2_python/__init__.py
+"""Python package for prebuilt PJSUA2 bindings."""
+EOF
+fi

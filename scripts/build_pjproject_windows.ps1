@@ -29,4 +29,11 @@ python setup.py build_ext --inplace
 # Copy .pyd into package
 Set-Location "..\..\..\..\.."
 New-Item -ItemType Directory -Path "src\pjsua2_python" -Force | Out-Null
+if (-not (Test-Path "pjproject\pjsip-apps\src\swig\python\*.pyd")) {
+  throw "No .pyd bindings were produced in pjproject\pjsip-apps\src\swig\python"
+}
 Copy-Item "pjproject\pjsip-apps\src\swig\python\*.pyd" "src\pjsua2_python\"
+Copy-Item "pjproject\pjsip-apps\src\swig\python\*.py" "src\pjsua2_python\" -ErrorAction SilentlyContinue
+if (-not (Test-Path "src\pjsua2_python\__init__.py")) {
+  Set-Content -Path "src\pjsua2_python\__init__.py" -Value '"""Python package for prebuilt PJSUA2 bindings."""'
+}
