@@ -12,18 +12,11 @@ license = { text = "BSD-2-Clause" }
 
 [tool.cibuildwheel]
 build = "cp310-*"
-skip = "cp310-musllinux*"
 
-[tool.cibuildwheel.linux]
-before-build = "bash scripts/build_pjproject_linux.sh"
-archs = ["x86_64", "i686", "aarch64", "ppc64le", "s390x", "armv7l", "riscv64"]
+# Linux: x86_64 + ARM64
+archs = ["x86_64", "aarch64"]
 manylinux-x86_64-image = "manylinux2014"
-manylinux-i686-image = "manylinux2014"
 manylinux-aarch64-image = "manylinux2014"
-manylinux-ppc64le-image = "manylinux2014"
-manylinux-s390x-image = "manylinux2014"
-manylinux-armv7l-image = "manylinux_2_31"
-manylinux-riscv64-image = "manylinux_2_39"
 
-[tool.cibuildwheel.windows]
-archs = ["AMD64"]
+# Windows: AMD64
+windows-archs = ["auto64"]
